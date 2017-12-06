@@ -1,0 +1,15 @@
+#Requirements
+
+library(foreign)
+library(dplyr)
+library(car)
+library(rsconnect)
+library(shiny)
+library(shinydashboard)
+library(RPostgreSQL)
+library(highcharter)
+library(data.table)
+library(DT)
+library(dplyr)
+library(Hmisc)
+library(ggplot2)
