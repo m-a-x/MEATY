@@ -35,14 +35,16 @@ server <- function(input, output, session) {
   })
   
   output$top_posters <- renderPlot({
-    top_posters <- post_data[, .(num_posts = length(id)), by=c("poster_name")][order(-num_posts)]
+    top_posters <- post_data[, .(num_posts = length(id)), 
+                             by=c("poster_name")][order(-num_posts)]
     top10_posters <- top_posters[1:10]
     top_poster_activity <- post_data[poster_name %in% top10_posters$poster_name,
-                                     .(num_posts = length(id)),
+                                     .(num_reacts = sum(num_reacts)),
                                      by=c("poster_name", "post_date")][order(poster_name, post_date)]
-    top_poster_activity[, cum_posts := cumsum(num_posts), by=c("poster_name")]
-    ggplot(data = top_poster_activity, aes(x = post_date, y = cum_posts, color = as.character(poster_name))) + 
-      geom_line() + ylab("Cumulative Posts") + xlab("") + theme(legend.title=element_blank())
+    
+    top_poster_activity[, cum_reacts := cumsum(num_reacts), by=c("poster_name")]
+    ggplot(data = top_poster_activity, aes(x = post_date, y = cum_reacts, color = as.character(poster_name))) + 
+      geom_line() + ylab("Cumulative Reacts") + xlab("") + theme(legend.title=element_blank())
   })
   
   # Post reacts

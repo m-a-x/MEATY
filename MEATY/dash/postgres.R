@@ -5,7 +5,7 @@ drv <- dbDriver("PostgreSQL")
 
 # creates a connection to the postgres database
 con <- dbConnect(drv, dbname = "postgres",
-                 host = "35.190.137.115",
+                 host = "35.196.103.17",
                  user = "postgres", password = "meaty")
 
 # get table and field info
