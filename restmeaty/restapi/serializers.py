@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from restapi.models import GroupMembers, Posts, Schools
 from rest_framework import serializers
 
+
 class MemberSerializer(serializers.ModelSerializer):
 
     class Meta:

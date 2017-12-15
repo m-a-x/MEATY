@@ -1,3 +1,5 @@
 restmeaty/migrations
 restmeaty/migrations/**
+restmeaty/restmeaty/config.py
+**.pyc
 
