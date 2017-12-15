@@ -22,6 +22,8 @@ renderActivityPlot <- function(interval, input, post_data) {
 
 
 server <- function(input, output, session) {
+  
+  date <- as.Date("2017-11-16")
 
   post_data[, ':='(post_week=as.Date(cut.Date(post_date, breaks = "weeks")),
                    post_month=as.Date(cut.Date(post_date, breaks = "months")))]
@@ -51,7 +53,8 @@ server <- function(input, output, session) {
   output$top_posts_plot <- renderPlot({
     var1 <- "post_date"
     var2 <- "id"
-    date_range <- c(Sys.Date() - 365, Sys.Date())
+    #date_range <- c(date - 365, date)
+    date_range <- input$activity_date_range
     
     plot_data <- post_data[post_date >= date_range[1] & post_date <= date_range[2],
                            .SD, .SDcols = c(var1, var2, "num_reacts")]
@@ -74,13 +77,13 @@ server <- function(input, output, session) {
   output$page_activity <- renderActivityPlot("day", input, post_data)
   
   # Member-related info boxes
-  output$members_today <- renderInfoBox({
-    today_members <- member_data[date_added == Sys.Date()]
-    infoBox("New Members Today", nrow(today_members), icon = icon("user"), color = "green")
+  output$members_day <- renderInfoBox({
+    day_members <- member_data[date_added == date]
+    infoBox("New Members Today", nrow(day_members), icon = icon("user"), color = "green")
   })
   
   output$members_week <- renderInfoBox({
-    week_members <- member_data[date_added > Sys.Date() - 7]
+    week_members <- member_data[date_added > date - 7]
     print(nrow(week_members))
     infoBox("New Members This Week", nrow(week_members), icon = icon("user"), color = "purple")
   })
@@ -90,18 +93,18 @@ server <- function(input, output, session) {
   })
   
   # Posts-related info boxes
-  output$total_posts_today <- renderInfoBox({
-    today_posts <- post_data[post_date == Sys.Date()]
-    infoBox("Posts Today", nrow(today_posts), icon = icon("list"), color = "aqua")
+  output$total_posts_day <- renderInfoBox({
+    day_posts <- post_data[post_date == date]
+    infoBox("Posts Today", nrow(day_posts), icon = icon("list"), color = "aqua")
   })
   
   output$total_posts_week <- renderInfoBox({
-    week_posts <- post_data[post_date > Sys.Date() - 7]
+    week_posts <- post_data[post_date > date - 7]
     infoBox("Posts This Week", nrow(week_posts), icon = icon("list"), color = "green")
   })
   
   output$today_posts_reacts <- renderInfoBox({
-    today_posts <- post_data[post_date == Sys.Date()]
+    today_posts <- post_data[post_date == date]
     infoBox("Today's Post Reacts", sum(today_posts$num_reacts), icon = icon("thumbs-up"), color = "red")
   })
 }
