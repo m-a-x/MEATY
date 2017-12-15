@@ -13,7 +13,7 @@ body <- dashboardBody(
     tabItem(tabName = "members",
             h1("Members"),
             fluidRow(
-              infoBoxOutput("members_today"),
+              infoBoxOutput("members_day"),
               infoBoxOutput("members_week"),
               infoBoxOutput("total_members")
             ),
@@ -28,27 +28,41 @@ body <- dashboardBody(
     tabItem(tabName = "posts",
             h1("Posts"),
             fluidRow(
-              infoBoxOutput("total_posts_today"),
+              infoBoxOutput("total_posts_day"),
               infoBoxOutput("total_posts_week"),
               infoBoxOutput("today_posts_reacts")
             ),
             fluidRow(
               box(title = "Page Activity", solidHeader = TRUE, collapsible = TRUE,
-                  plotOutput("page_activity"),
-                  fluidRow(
-                    actionButton("activity_by_day", "Day"),
-                    actionButton("activity_by_week", "Week"),
-                    actionButton("activity_by_month", "Month")
-                  )
-              ),
-              box(title = "Page Activity Inputs", solidHeader = TRUE, collapsible = TRUE,
                   dateRangeInput("activity_date_range", "During Period:",
                                  start = Sys.Date() - 364,
                                  end = Sys.Date()),
-                  p("User Filters"),
-                  dateRangeInput("activity_user_date_range", "Users joined between",
-                                 start = Sys.Date() - 364,
-                                 end = Sys.Date())
+                  plotOutput("page_activity"),
+                  fluidRow(
+                    column(6, align="center", offset = 3,
+                    actionButton("activity_by_day", "Day"),
+                    actionButton("activity_by_week", "Week"),
+                    actionButton("activity_by_month", "Month")
+                    )
+                  )
+              ),
+              box(title = "Post References", solidHeader = TRUE, collapsible = TRUE,
+                  fluidRow(
+                      column(10, align="center", offset = 1,
+                    p('Click on a word to see the number of references for each school:'),
+                    actionButton("harvard_dist", "Harvard",
+                                 style="color: #fff; background-color: #C90016; border-color: #2e6da4"),
+                    actionButton("goldman_dist", "Goldman",
+                                 style="color: #fff; background-color: #7399C6; border-color: #2e6da4"),
+                    actionButton("cry_dist", "Cry",
+                                 style="color: #fff; background-color: #000000; border-color: #2e6da4"),
+                    actionButton("stress_dist", "Stress",
+                                 style="color: #fff; background-color: #FFA500; border-color: #2e6da4")
+                      )
+                  )
+              ),
+              box(
+                plotOutput("word_count")
               )
             )
     )
