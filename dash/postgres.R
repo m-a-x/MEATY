@@ -10,11 +10,13 @@ con <- dbConnect(drv, dbname = "postgres",
 
 # get table and field info
 dbListTables(con)
-dbListFields(con, "posts")
+dbListFields(con, "count_assoc_words")
 
 # extract data from the database
 post_data <- dbReadTable(con, "posts")
 member_data <- dbReadTable(con, "group_members")
+word_data <- dbReadTable(con, "count_assoc_words")
+names(word_data) <- c('query','Brown', 'Columbia','Cornell', 'Dartmouth','Harvard','Penn','Princeton','Yale')
 
 test <- duplicated.data.frame(post_data, by = c('caption', 'post_time', 'num_reacts', 'poster_name','title'))
 

@@ -20,6 +20,22 @@ renderActivityPlot <- function(interval, input, post_data) {
   })
 }
 
+renderWordDist <- function(word, word_data) {
+  renderPlot({
+    
+    word_data_melted <- melt(word_data, id = 'query')
+    names(word_data_melted)[-1] <- c('School','Frequency') 
+    
+    ggplot(data = word_data_melted[word_data_melted$query == word,], 
+           aes(x = School, y = Frequency, fill = School)) +
+      geom_bar(stat = 'identity') +
+      theme(axis.title.x=element_blank(),
+            axis.text.x=element_blank(),
+            axis.ticks.x=element_blank()) +
+      ggtitle(paste("Number of references to", word))
+  })
+}
+
 
 server <- function(input, output, session) {
   
@@ -107,4 +123,24 @@ server <- function(input, output, session) {
     today_posts <- post_data[post_date == date]
     infoBox("Today's Post Reacts", sum(today_posts$num_reacts), icon = icon("thumbs-up"), color = "red")
   })
+  
+  
+  #Word Count Distributions
+  observeEvent(input$harvard_dist, {
+    output$word_count <- renderWordDist("harvard", word_data)
+  })
+  observeEvent(input$goldman_dist, {
+    output$word_count <- renderWordDist("goldman", word_data)
+  })
+  
+  observeEvent(input$cry_dist, {
+    output$word_count <- renderWordDist("cry", word_data)
+  })
+  
+  observeEvent(input$stress_dist, {
+    output$word_count <- renderWordDist("stress", word_data)
+  })
+  
+  output$word_count <- renderWordDist("stress", word_data)
+  
 }

@@ -39,10 +39,30 @@ body <- dashboardBody(
                                  end = Sys.Date()),
                   plotOutput("page_activity"),
                   fluidRow(
+                    column(6, align="center", offset = 3,
                     actionButton("activity_by_day", "Day"),
                     actionButton("activity_by_week", "Week"),
                     actionButton("activity_by_month", "Month")
+                    )
                   )
+              ),
+              box(title = "Post References", solidHeader = TRUE, collapsible = TRUE,
+                  fluidRow(
+                      column(10, align="center", offset = 1,
+                    p('Click on a word to see the number of references for each school:'),
+                    actionButton("harvard_dist", "Harvard",
+                                 style="color: #fff; background-color: #C90016; border-color: #2e6da4"),
+                    actionButton("goldman_dist", "Goldman",
+                                 style="color: #fff; background-color: #7399C6; border-color: #2e6da4"),
+                    actionButton("cry_dist", "Cry",
+                                 style="color: #fff; background-color: #000000; border-color: #2e6da4"),
+                    actionButton("stress_dist", "Stress",
+                                 style="color: #fff; background-color: #FFA500; border-color: #2e6da4")
+                      )
+                  )
+              ),
+              box(
+                plotOutput("word_count")
               )
             )
     )
